@@ -117,65 +117,73 @@
                 @endif
             </div>
 
-            <!-- Skills I Want to Improve -->
-            <div x-show="tab === 'second'" class="mb-8">
-                <h3 class="text-lg font-medium mb-4 text-gray-800">Skills I Want to Improve</h3>
+            
 
-                @if($userFuturePractices->isEmpty())
-                    <div class="bg-white rounded-lg p-6 shadow border border-gray-200 text-center">
-                        <div class="text-gray-400 mb-2">
-                            <x-heroicon-o-arrow-trending-up class="inline-block w-12 h-12" />
-                        </div>
-                        <h3 class="text-lg font-medium text-gray-800">No improvement areas recorded yet</h3>
-                    </div>
-                @else
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                        @php
-                            // Sort skills by improvement frequency minus demonstration frequency
-                            $improvementSkills = $userFuturePractices->groupBy('skill_id');
-                            $sortedImprovements = $improvementSkills->sortByDesc(function($group) use ($skillFrequency) {
-                                $skillId = $group->first()->skill_id;
-                                $improvementCount = $group->count();
-                                $demonstratedCount = $skillFrequency[$skillId] ?? 0;
-                                return $improvementCount - $demonstratedCount;
-                            });
-                        @endphp
+            
+            @php
+    // Group future practices by Skill Area, then Skill
+    $areaGroups = $userFuturePractices->groupBy(fn($item) => $item->skill->skillArea->id);
 
-                        @foreach($sortedImprovements as $skillId => $practices)
-                            @php
-                                $skill = $practices->first()->skill;
-                                $area = $skill->skillArea;
-                                $count = $practices->count();
-                                $color = $colors[$area->id] ?? '#888888';
-                                $demoCount = $skillFrequency[$skillId] ?? 0;
-                            @endphp
+    // Sort area groups by total "improvement – demonstrated"
+    $sortedAreaGroups = $areaGroups->sortByDesc(function($group) use ($skillFrequency) {
+        return $group->sum(function($practice) use ($skillFrequency) {
+            $skillId = $practice->skill_id;
+            $improveCount = $group->where('skill_id', $skillId)->count();
+            $demoCount = $skillFrequency[$skillId] ?? 0;
+            return $improveCount - $demoCount;
+        });
+    });
+@endphp
 
-                            <div class="bg-white rounded-lg p-5 shadow border border-gray-200" style="border-top-width: 4px; border-top-color: {{ $area->color }};">
-                                <div class="flex items-center justify-between mb-2">
-                                    <h4 class="font-medium text-gray-800">
-                                        @if($count)
-                                        <span style="color:{{ $area->color }};" class="font-bold text-amber-600">{{ $count }}</span>
-                                    @endif
-                                        <span>{{ $area->name }}:</span>
-                                        <p style="margin-left:24px" class='ml-[16px]'> {{ $skill->name }}</p>
-                                    </h4>
-                                
-                                </div>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+    @foreach($sortedAreaGroups as $areaId => $practicesByArea)
+        @php
+            $area = $practicesByArea->first()->skill->skillArea;
+            $color = $colors[$areaId] ?? '#888888';
 
+            // Group by Skill inside the area
+            $skillGroups = $practicesByArea->groupBy('skill_id');
+        @endphp
 
-                                <ul class="space-y-2 mt-1 pl-8">
-                                    @foreach($practices as $practice)
-                                        <li class="p-2 bg-gray-100 rounded text-sm text-gray-600">
-                                            <div class="text-sm text-gray-500 mt-1">{{ $practice->practice->description }}</div>
-                                            <div class="text-xs text-gray-400 mt-1">Selected on {{ $practice->selected_at ? $practice->selected_at->format('M d, Y') : 'Unknown date' }}</div>
-                                        </li>
-                                    @endforeach
-                                </ul>
+        @foreach($skillGroups as $skillId => $practices)
+            @php
+                $skill = $practices->first()->skill;
+                $count = $practices->count();
+                $demoCount = $skillFrequency[$skillId] ?? 0;
+            @endphp
+
+            <!-- Card design unchanged -->
+            <div class="bg-white rounded-lg p-5 shadow border border-gray-200"
+                 style="border-top-width: 4px; border-top-color: {{ $area->color }};">
+
+                <div class="flex items-center justify-between mb-2">
+                    <h4 class="font-medium text-gray-800">
+                        @if($count)
+                            <span style="color:{{ $area->color }};" class="font-bold">{{ $count }}</span>
+                        @endif
+
+                        <span>{{ $area->name }}:</span>
+                        <span style="margin-left:24px">{{ $skill->name }}</span>
+                    </h4>
+                </div>
+
+                <ul class="space-y-2 mt-1 pl-8">
+                    @foreach($practices as $practice)
+                        <li class="p-2 bg-gray-100 rounded text-sm text-gray-600">
+                            <div class="text-sm text-gray-500">{{ $practice->practice->description }}</div>
+                            <div class="text-xs text-gray-400 mt-1">
+                                Selected on {{ $practice->selected_at ? $practice->selected_at->format('M d, Y') : 'Unknown date' }}
                             </div>
-                        @endforeach
-                    </div>
-                @endif
+                        </li>
+                    @endforeach
+                </ul>
+
             </div>
+        @endforeach
+
+    @endforeach
+</div>
+
         </div>
 
        

@@ -137,7 +137,9 @@
                 
                 <div>
                     @forelse($savedSkills as $item)
+                       
                         <div class="flex gap-2 mb-2">
+                            <b> Skill {{ $loop->index + 1 }}: </b>
                             <span class="px-3 py-1 text-white font-bold rounded-md" style="background-color: {{ $item['color']['base'] }}">
                                 {{ $item['area'] }}
                             </span>
@@ -155,6 +157,53 @@
                     @endforelse
                 </div>
 
+              
+
+                <div x-show="tab === 'second'" x-transition class="mt-4 space-y-2">
+
+                    if()
+                    @php
+                        $lastThreeSkills = \App\Models\UserSkillPractice::where('user_id', Auth::id())
+                            ->orderBy('selection_number', 'desc')
+                            ->where('is_demonstrated', 1)
+                            ->take(3)
+                            ->get();
+                    @endphp
+
+                    <b>Evaluate Recent Performance</b>
+
+                    @foreach($lastThreeSkills as $skillPractice)
+                        @php
+                            $skill = $skillPractice->skill;
+                            $area  = $skill->skillArea;
+
+                            // Fallback colors from area
+                            $colorBase = $area->color ?? '#6b7280';
+                            $colorMid  = $area->color ?? '#4b5563';
+                            $colorDark = $area->color ?? '#374151';
+                        @endphp
+
+                        <div class="flex gap-2 mb-2">
+                            <b>Skill {{ $loop->index + 1 }}:</b>
+
+                            <span class="px-3 py-1 text-white font-bold rounded-md"
+                                style="background-color: {{ $colorBase }}">
+                                {{ $area->name }}
+                            </span>
+
+                            <span class="px-3 py-1 text-white rounded-md"
+                                style="background-color: {{ $colorMid }}">
+                                {{ $skill->name }}
+                            </span>
+
+                            <span class="px-3 py-1 text-white rounded-md"
+                                style="background-color: {{ $colorDark }}">
+                                {{ $skillPractice->practice->description }}
+                            </span>
+                        </div>
+                    @endforeach
+                </div>
+
                 
 
 
@@ -168,6 +217,9 @@
                                     @click="tab = 'first'" wire:click="resetAndStartOver"
                                     :class="tab === 'first' ? 'border-b-2 border-indigo-400' : ''" 
                                     class="flex items-center gap-2 px-2 py-1"
+                                    :disabled="!@js($enableRecentTab)"
+                                    :style="!@js($enableRecentTab) ? 'opacity: 0.5;cursor: not-allowed;' : ''"
+                                    
                                 >
                                     <img :style="tab === 'first' ? 'display: none;' : ''" src="{{ asset('images/success-icon.png') }}" alt="Past Performance Icon" class="w-7 h-7">
                                     <span>Evaluate Recent Performance</span>
@@ -323,7 +375,7 @@
                                     ]);
                                 @endphp
 
-                            @foreach($skills as $skill)
+                                @foreach($skills as $skill)
                                     <div wire:click.prevent="selectSkill({{ $skill['id'] }})" class="cursor-pointer transition-all duration-200 skill-card">
                                         <div 
                                             class="p-4 border rounded-lg {{ $selectedSkillId == $skill['id'] ? 'ring-2 ring-primary-500' : '' }}" 

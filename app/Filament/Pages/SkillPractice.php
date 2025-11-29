@@ -81,6 +81,8 @@ class SkillPractice extends Page
     public $showSummary = false;
     public $enableFutureTab = false;
 
+    public $enableRecentTab  = true;
+
     public function mount(): void
     {
         // First clean up any duplicate practices in the database
@@ -542,39 +544,39 @@ class SkillPractice extends Page
 
    
     public function loadSavedSkills($limit = 1) // default 2 if no argument passed
-{
-    $this->savedSkills = [];
+    {
+        $this->savedSkills = [];
 
-    $userSkills = UserSkillPractice::where('user_id', Auth::id())
-        ->orderBy('selection_number', 'desc') // latest first
-        ->limit($limit-1)
-        ->get();
+        $userSkills = UserSkillPractice::where('user_id', Auth::id())
+            ->orderBy('selection_number', 'desc')
+            ->limit($limit-1)
+            ->get();
 
-    foreach ($userSkills as $userSkill) {
-        $area = SkillArea::find($userSkill->skill_area_id);
-        $skill = Skill::find($userSkill->skill_id);
-        $practice = Practice::find($userSkill->practice_id);
+        foreach ($userSkills as $userSkill) {
+            $area = SkillArea::find($userSkill->skill_area_id);
+            $skill = Skill::find($userSkill->skill_id);
+            $practice = Practice::find($userSkill->practice_id);
 
-        if (!$area || !$skill || !$practice) continue;
+            if (!$area || !$skill || !$practice) continue;
 
-        $baseColor = $area->color ?? '#666';
-        [$r, $g, $b] = sscanf($baseColor, "#%02x%02x%02x");
-        $midColor = sprintf("#%02x%02x%02x", max($r-30,0), max($g-30,0), max($b-30,0));
-        $darkColor = sprintf("#%02x%02x%02x", max($r-60,0), max($g-60,0), max($b-60,0));
+            $baseColor = $area->color ?? '#666';
+            [$r, $g, $b] = sscanf($baseColor, "#%02x%02x%02x");
+            $midColor = sprintf("#%02x%02x%02x", max($r-30,0), max($g-30,0), max($b-30,0));
+            $darkColor = sprintf("#%02x%02x%02x", max($r-60,0), max($g-60,0), max($b-60,0));
 
-        $this->savedSkills[] = [
-            'area' => $area->name,
-            'skill' => $skill->name,
-            'practice' => $practice->description,
-            'color' => [
-                'base' => $baseColor,
-                'mid' => $midColor,
-                'dark' => $darkColor
-            ],
-            'demonstrated' => $userSkill->is_demonstrated
-        ];
+            $this->savedSkills[] = [
+                'area' => $area->name,
+                'skill' => $skill->name,
+                'practice' => $practice->description,
+                'color' => [
+                    'base' => $baseColor,
+                    'mid' => $midColor,
+                    'dark' => $darkColor
+                ],
+                'demonstrated' => $userSkill->is_demonstrated
+            ];
+        }
     }
-}
 
 
 
@@ -629,8 +631,10 @@ class SkillPractice extends Page
             if($this->navTab === 'first'){
                 $this->navTab = 'second';
                 $this->enableFutureTab = true;
+
             }else{
                 $this->navTab = 'first';
+                $this->enableFutureTab = false;
             }
         }else{
             $this->currentSelection++;

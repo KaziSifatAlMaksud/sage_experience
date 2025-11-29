@@ -147,7 +147,10 @@
             
 
             <!-- Skills I Want to Improve -->
-            <div x-show="tab === 'second'" class="mb-8">
+
+           
+
+           <div x-show="tab === 'second'" class="mb-8">
                 <h3 class="text-lg font-medium mb-4 text-gray-800">Skills I Want to Improve</h3>
 
                 @if($userFuturePractices->isEmpty())
@@ -157,54 +160,121 @@
                         </div>
                         <h3 class="text-lg font-medium text-gray-800">No improvement areas recorded yet</h3>
                     </div>
+
                 @else
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    @php
+                        // Group by Skill Area
+                        $areaGroups = $userFuturePractices->groupBy(fn($item) => $item->skill->skillArea->id);
+                    @endphp
+
+                    @foreach($areaGroups as $areaId => $practicesByArea)
                         @php
-                            // Sort skills by improvement frequency minus demonstration frequency
-                            $improvementSkills = $userFuturePractices->groupBy('skill_id');
-                            $sortedImprovements = $improvementSkills->sortByDesc(function($group) use ($skillFrequency) {
-                                $skillId = $group->first()->skill_id;
-                                $improvementCount = $group->count();
-                                $demonstratedCount = $skillFrequency[$skillId] ?? 0;
-                                return $improvementCount - $demonstratedCount;
-                            });
+                            $area = $practicesByArea->first()->skill->skillArea;
+                            $color = $colors[$area->id] ?? '#888888';
+
+                            // Group by Skill
+                            $skillGroups = $practicesByArea->groupBy(fn($item) => $item->skill->id);
                         @endphp
 
-                        @foreach($sortedImprovements as $skillId => $practices)
-                            @php
-                                $skill = $practices->first()->skill;
-                                $area = $skill->skillArea;
-                                $count = $practices->count();
-                                $color = $colors[$area->id] ?? '#888888';
-                                $demoCount = $skillFrequency[$skillId] ?? 0;
-                            @endphp
+                        <div class="border rounded-lg overflow-hidden bg-white shadow mb-4">
 
-                            <div class="bg-white rounded-lg p-5 shadow border border-gray-200" style="border-top-width: 4px; border-top-color: {{ $area->color }};">
-                                <div class="flex items-center justify-between mb-2">
-                                    <h4 class="font-medium text-gray-800">
-                                        @if($count)
-                                        <span style="color:{{ $area->color }};" class="font-bold text-amber-600">{{ $count }}</span>
-                                    @endif
-                                        <span>{{ $area->name }}:</span>
-                                        <p style="margin-left:24px" class='ml-[16px]'> {{ $skill->name }}</p>
-                                    </h4>
-                                
-                                </div>
-
-
-                                <ul class="space-y-2 mt-1 pl-8">
-                                    @foreach($practices as $practice)
-                                        <li class="p-2 bg-gray-100 rounded text-sm text-gray-600">
-                                            <div class="text-sm text-gray-500 mt-1">{{ $practice->practice->description }}</div>
-                                            <div class="text-xs text-gray-400 mt-1">Selected on {{ $practice->selected_at ? $practice->selected_at->format('M d, Y') : 'Unknown date' }}</div>
-                                        </li>
-                                    @endforeach
-                                </ul>
+                            <!-- Area Header -->
+                            <div class="p-4 font-bold text-gray-900" style="border-top: 4px solid {{ $area->color }}">
+                                {{ $area->name }}
                             </div>
-                        @endforeach
-                    </div>
+
+                            <div class="pl-8 pr-4 py-3 bg-gray-50 space-y-2">
+
+                                @foreach($skillGroups as $skillId => $practicesBySkill)
+                                    @php
+                                        $skill = $practicesBySkill->first()->skill;
+
+                                        // Group by description
+                                        $descriptionGroups = $practicesBySkill->groupBy(fn($p) => $p->practice->description);
+
+                                        // Total count for skill header
+                                        $totalCount = $descriptionGroups->reduce(fn($carry, $group) => $carry + $group->count(), 0);
+
+                                        // Demo count from first tab (optional)
+                                        $demoCount = $skillFrequency[$skillId] ?? 0;
+                                    @endphp
+
+                                    <div class="mb-2">
+
+                                        <!-- Skill Header -->
+                                        <div class="flex items-center cursor-pointer text-gray-800"
+                                            x-data="{ open: false }"
+                                            @click="open = !open">
+
+                                            <span class="font-bold mr-4" style="color: {{ $color }}; font-size:25px">
+                                                {{ $totalCount }}
+                                            </span>
+
+                                            <span class="font-medium text-base" style="font-size:18px;">
+                                                {{ $skill->name }}
+                                            </span>
+                                        </div>
+
+                                        <!-- Description Groups -->
+                                        <div x-show="open" x-transition class="pl-8 mt-1 space-y-1">
+
+                                            @foreach($descriptionGroups as $desc => $descGroup)
+                                                @php $descCount = $descGroup->count(); @endphp
+
+                                                <div x-data="{ openChild: false }">
+
+                                                    <div class="flex items-center cursor-pointer"
+                                                        @click="openChild = !openChild">
+
+                                                        <span class="font-bold mr-4" style="color: {{ $color }}">
+                                                            {{ $descCount }}
+                                                        </span>
+
+                                                        <span class="text-gray-800">
+                                                            {{ $desc }}
+                                                        </span>
+
+                                                        <!-- Arrows -->
+                                                        <svg x-show="!openChild" class="h-5 w-5 text-gray-400 ml-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                                                        </svg>
+                                                        <svg x-show="openChild" class="h-5 w-5 text-gray-400 ml-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"/>
+                                                        </svg>
+                                                    </div>
+
+                                                    <!-- Individual Practices -->
+                                                    <div x-show="openChild" x-transition class="pl-8 mt-1 space-y-1">
+                                                        @foreach($descGroup as $practice)
+                                                            <div class="p-2 bg-gray-100 rounded text-sm text-gray-600">
+                                                                <div class="text-sm text-gray-500">
+                                                                    {{ $practice->practice->description }}
+                                                                </div>
+                                                                <div class="text-xs text-gray-400 mt-1">
+                                                                    Selected on {{ $practice->selected_at ? $practice->selected_at->format('M d, Y') : 'Unknown date' }}
+                                                                </div>
+                                                            </div>
+                                                        @endforeach
+                                                    </div>
+
+                                                </div>
+
+                                            @endforeach
+
+                                        </div>
+
+                                    </div>
+
+                                @endforeach
+
+                            </div>
+                        </div>
+
+                    @endforeach
+
                 @endif
             </div>
+
         </div>
 
        
