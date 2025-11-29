@@ -161,7 +161,7 @@
 
                 <div x-show="tab === 'second'" x-transition class="mt-4 space-y-2">
 
-                    if()
+                
                     @php
                         $lastThreeSkills = \App\Models\UserSkillPractice::where('user_id', Auth::id())
                             ->orderBy('selection_number', 'desc')

@@ -631,11 +631,22 @@ class SkillPractice extends Page
             if($this->navTab === 'first'){
                 $this->navTab = 'second';
                 $this->enableFutureTab = true;
+                 $this->enableRecentTab = false;
 
-            }else{
-                $this->navTab = 'first';
-                $this->enableFutureTab = false;
-            }
+            }else {
+                    $this->navTab = 'first';
+                    $this->enableFutureTab = false;
+                    $this->enableRecentTab = true;
+
+                    Notification::make()
+                        ->title('Skills Saved Successfully')
+                        ->body('You have successfully completed selecting your skills.')
+                        ->success()
+                        // Add a unique ID to prevent duplicate notifications
+                        ->id('skills-saved-' . now()->timestamp)
+                        ->send();
+                }
+
         }else{
             $this->currentSelection++;
         }
