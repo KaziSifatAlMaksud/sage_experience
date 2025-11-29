@@ -1,0 +1,188 @@
+@import '../../../../vendor/filament/filament/resources/css/theme.css';
+
+:root {
+    /* Updated green color palette */
+    --color-primary-50: 240 247 240;
+    --color-primary-100: 231 240 230;
+    --color-primary-200: 220 235 220;
+    --color-primary-300: 190 215 190;
+    --color-primary-400: 120 170 100;
+    --color-primary-500: 67 100 66;  /* #41712a - Main green for sidebar/header */
+    --color-primary-600: 67 100 66;  /* #41712a - Same as 500 for consistency */
+    --color-primary-700: 55 90 55;   /* Darker shade for depth */
+    --color-primary-800: 45 80 45;
+    --color-primary-900: 35 70 35;
+    --color-primary-950: 20 40 20;
+}
+
+/* High contrast sidebar with white text */
+.fi-sidebar {
+    --tw-bg-opacity: 1;
+    background-color: rgb(var(--color-primary-500) / var(--tw-bg-opacity))
+    !important;
+}
+
+.fi-sidebar-header {
+    background-color: rgb(var(--color-primary-500) / var(--tw-bg-opacity)) !important;
+    border: none !important;
+}
+
+
+.fi-sidebar-item-label, .fi-sidebar-item a, .fi-sidebar-group-title {
+    --tw-text-opacity: 1;
+    color: rgb(255 255 255 / var(--tw-text-opacity));
+}
+
+.fi-sidebar-item-active {
+    --tw-bg-opacity: 0.8;
+    background-color: rgb(var(--color-primary-400) / var(--tw-bg-opacity)) !important;
+}
+
+.fi-sidebar-item:hover {
+    --tw-bg-opacity: 0.8;
+    background-color: rgb(var(--color-primary-400) / var(--tw-bg-opacity));
+}
+
+/* Gray/green main background */
+.fi-main {
+    --tw-bg-opacity: 1;
+    background-color: #e7f0e6 !important; /* Specified background color */
+}
+
+/* Dashboard cards background - WHITE */
+.fi-section, .fi-card, .fi-widget, .fi-wi-stats-overview-stat {
+    /* Use Filament's default background and border */
+}
+
+.filament-input,
+.filament-select,
+.filament-textarea,
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="number"],
+select,
+textarea {
+    /* Use Filament's default input background and color */
+}
+
+.filament-input:disabled,
+.filament-select:disabled,
+.filament-textarea:disabled,
+input:disabled,
+select:disabled,
+textarea:disabled {
+    /* Use Filament's default disabled input background and color */
+}
+
+
+/* Dashboard button text color */
+.fi-btn.fi-btn-color-primary {
+    --tw-text-opacity: 1;
+    color: rgb(255 255 255 / var(--tw-text-opacity)) !important;
+    background-color: rgb(var(--color-primary-500) / var(--tw-bg-opacity)) !important;
+}
+
+.fi-topbar {
+    --tw-bg-opacity: 1;
+    background-color: #e7f0e6 !important;
+    border-bottom: 1px solid rgba(67, 100, 66, 0.15) !important;
+}
+
+.fi-topbar nav {
+    background-color: #e7f0e6 !important;
+}
+
+
+/* Ensure consistent text colors */
+.fi-topbar *, .fi-header-heading {
+    color: rgb(var(--color-primary-500) / 1) !important;
+}
+
+/* Dark mode compatibility */
+[data-dark-mode="true"] .fi-topbar *,
+[data-dark-mode="true"] .fi-header-heading,
+.dark .fi-topbar *,
+.dark .fi-header-heading {
+    color: rgb(var(--color-primary-400) / 1) !important;
+}
+
+/* Responsive navigation */
+.fi-topbar nav {
+    overflow-x: auto !important;
+    white-space: nowrap !important;
+    display: flex !important;
+    flex-wrap: nowrap !important;
+    -webkit-overflow-scrolling: touch !important;
+    scrollbar-width: thin !important;
+    padding-bottom: 5px !important;
+    max-width: 100% !important;
+    scroll-behavior: smooth !important;
+}
+
+/* Layout fixes */
+.fi-topbar {
+    justify-content: space-between !important;
+}
+
+.fi-user-menu {
+    margin-left: auto !important;
+}
+
+/* Scrollbar styling */
+.fi-topbar nav::-webkit-scrollbar {
+    height: 4px !important;
+    background: transparent;
+}
+
+.fi-topbar nav::-webkit-scrollbar-thumb {
+    background: #41713a !important;
+    border-radius: 2px;
+}
+
+/* High contrast text on panels */
+.fi-section-header-heading,
+.fi-ta-text,
+.fi-fo-field-wrp label,
+.fi-ta-header-cell-label,
+.fi-pagination-item {
+    color: #41712a !important;
+    font-weight: 500;
+}
+
+/* Card content text colors */
+.fi-card-content,
+.fi-section-content,
+.fi-widget-content {
+    color: #333333;
+}
+
+.fi-ta-text,
+.fi-fo-field-wrp-label {
+    color: #444444 !important;
+}
+
+/* Dashboard widget stat values */
+.fi-wi-stats-overview-stat-value {
+    color: #333333 !important;
+    font-weight: 700 !important;
+}
+
+@media (max-width: 768px) {
+    .fi-topbar {
+        position: relative !important;
+    }
+
+    /* Optional: Add fade effect to indicate more content is available */
+    .fi-topbar::after {
+        content: '' !important;
+        position: absolute !important;
+        top: 0 !important;
+        right: 0 !important;
+        height: 100% !important;
+        width: 30px !important;
+        background: linear-gradient(to right, transparent, rgba(231, 240, 230, 0.9)) !important;
+        pointer-events: none !important;
+    }
+    
+}

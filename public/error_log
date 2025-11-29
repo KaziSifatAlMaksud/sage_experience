@@ -1,0 +1,14 @@
+[02-Apr-2025 20:32:18 UTC] PHP Fatal error:  Cannot use Spatie\Permission\Models\Permission as Permission because the name is already in use in /home/cleax72m7ppx/public_html/routes/web.php on line 10
+[15-Jun-2025 03:09:07 UTC] PHP Warning:  require(/home/cleax72m7ppx/public_html/vendor/autoload.php): Failed to open stream: No such file or directory in /home/cleax72m7ppx/public_html/public/index.php on line 17
+[15-Jun-2025 03:09:07 UTC] PHP Fatal error:  Uncaught Error: Failed opening required '/home/cleax72m7ppx/public_html/vendor/autoload.php' (include_path='.:/opt/alt/php82/usr/share/pear:/opt/alt/php82/usr/share/php:/usr/share/pear:/usr/share/php') in /home/cleax72m7ppx/public_html/public/index.php:17
+Stack trace:
+#0 {main}
+  thrown in /home/cleax72m7ppx/public_html/public/index.php on line 17
+[15-Jun-2025 03:09:34 UTC] PHP Warning:  require(/home/cleax72m7ppx/public_html/vendor/composer/../symfony/polyfill-mbstring/bootstrap.php): Failed to open stream: No such file or directory in /home/cleax72m7ppx/public_html/vendor/composer/autoload_real.php on line 41
+[15-Jun-2025 03:09:34 UTC] PHP Fatal error:  Uncaught Error: Failed opening required '/home/cleax72m7ppx/public_html/vendor/composer/../symfony/polyfill-mbstring/bootstrap.php' (include_path='.:/opt/alt/php82/usr/share/pear:/opt/alt/php82/usr/share/php:/usr/share/pear:/usr/share/php') in /home/cleax72m7ppx/public_html/vendor/composer/autoload_real.php:41
+Stack trace:
+#0 /home/cleax72m7ppx/public_html/vendor/composer/autoload_real.php(45): {closure}()
+#1 /home/cleax72m7ppx/public_html/vendor/autoload.php(25): ComposerAutoloaderInit88970a0117c062eed55fa8728fc43833::getLoader()
+#2 /home/cleax72m7ppx/public_html/public/index.php(17): require('/home/cleax72m7...')
+#3 {main}
+  thrown in /home/cleax72m7ppx/public_html/vendor/composer/autoload_real.php on line 41

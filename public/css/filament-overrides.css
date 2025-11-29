@@ -1,0 +1,170 @@
+/* filament-overrides.css: Custom styles for Filament dashboard */
+body,
+.fi-main {
+    background-color: #e7f0e6 !important; /* Sage gray/green background */
+}
+
+.filament-main-content, .fi-dashboard {
+    background-color: #e7f0e6 !important;
+}
+
+/* Add high contrast settings */
+.fi-sidebar {
+    background-color: #41713a !important; /* Match the header color from screenshot */
+}
+
+/* Sidebar navigation item - active state */
+.fi-sidebar a[aria-current="page"]:hover {
+    --tw-bg-opacity: 1;
+    background-color: #518e46 !important; /* Lighter shade of green */
+    --tw-text-opacity: 1;
+    color: #fff !important;
+}
+
+/* Sidebar item text (non-active) */
+.fi-sidebar .fi-sidebar-item-label,
+.fi-sidebar .fi-sidebar-group-label,
+.fi-sidebar a {
+    color: #FFFFFF !important; /* White text for non-active */
+}
+
+.fi-sidebar-header {
+    background-color: #41713a !important;
+    border-color: #436442 !important;
+}
+
+.fi-topbar {
+    background-color: #e7f0e6 !important;
+}
+
+.fi-topbar *, .fi-header-heading, .fi-topbar .fi-header-heading, .fi-topbar .fi-header-heading * {
+    color: #436442 !important; /* Match the sidebar color */
+}
+
+.fi-btn.fi-btn-color-primary,
+button.bg-orange-500,
+button.bg-orange-600,
+button.text-orange-600,
+button.text-orange-500 {
+    background-color: #436442 !important; /* Match the header/sidebar color */
+    color: #fff !important;
+    border: none !important;
+}
+
+/* Tag/Badge overrides */
+.fi-badge,
+.badge,
+.fi-tag,
+.fi-select-multi-value,
+.fi-select-multi-value-label,
+.fi-select-multi-value-remove {
+    background-color: #e2f2d7 !important; /* Light Sage for tag bg */
+    color: #436442 !important; /* Green text */
+    border-radius: 6px !important;
+    border: 1px solid #436442 !important;
+}
+
+/* Project Advisor label */
+.fi-label, .fi-label-project-advisor, .fi-label-advisor {
+    color: #436442 !important;
+    font-weight: 600;
+}
+
+/* Strong Active Sidebar Override */
+.fi-sidebar .fi-sidebar-item-active,
+.fi-sidebar .fi-sidebar-item.active,
+.fi-sidebar a[aria-current="page"] {
+    --tw-bg-opacity: 1;
+    background-color: #518e46 !important; /* Lighter shade of green */
+}
+.fi-sidebar .fi-sidebar-item-active > a,
+.fi-sidebar .fi-sidebar-item.active > a,
+.fi-sidebar a[aria-current="page"] {
+    --tw-text-opacity: 0.8;
+    color: #fff !important;
+}
+
+/* Section headers, high-contrast */
+.fi-section-header, .fi-section-title, .fi-section-label {
+    color: #436442 !important;
+    font-weight: 700;
+}
+
+/* Card backgrounds - white with border */
+.fi-section, .fi-card, .fi-widget {
+    --tw-bg-opacity: 1;
+    background-color: #ffffff !important;
+    --tw-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+    --tw-shadow-colored: 0 1px 3px 0 var(--tw-shadow-color), 0 1px 2px -1px var(--tw-shadow-color);
+    box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+    border: 1px solid rgba(67, 100, 66, 0.2) !important;
+}
+
+/* General input and select styling for high contrast */
+input, select, textarea {
+    background-color: #fff !important;
+    color: #222 !important;
+    border-radius: 6px !important;
+    border: 1px solid #436442 !important;
+}
+
+/* Override header H1 color to match sidebar */
+.fi-header-heading {
+    color: #436442 !important;
+}
+
+/* Dashboard widgets and stat cards */
+.fi-wi-stats-overview-stat {
+    background-color: #ffffff !important;
+    border: 1px solid rgba(67, 100, 66, 0.2) !important;
+}
+
+/* Primary color elements */
+.text-primary-600, .stroke-primary-600, .ring-primary-600 {
+    color: #436442 !important;
+    stroke: #436442 !important;
+    ring-color: #436442 !important;
+}
+
+/* Links and interactive elements */
+a, .fi-link, .hover:text-primary-600 {
+    color: #436442 !important;
+}
+
+/* Nav flex - match sidebar color */
+.fi-sidebar-nav, .fi-sidebar-group {
+    background-color: #436442 !important;
+}
+
+/* Card content and text */
+.fi-card, .fi-section, .fi-wi, .fi-widget {
+    color: #333333 !important;
+}
+
+/* Dashboard widgets - ensure text is visible on white background */
+.fi-wi-stats-overview-stat-label {
+    color: #436442 !important;
+    font-weight: 600 !important;
+}
+
+.fi-wi-stats-overview-stat-value {
+    color: #333333 !important;
+    font-weight: 700 !important;
+}
+
+.fi-wi-stats-overview-stat-description {
+    color: #555555 !important;
+}
+
+/* ============ Neutralize Active Sidebar Items ============ */
+.fi-sidebar .fi-sidebar-item-active,
+.fi-sidebar .fi-sidebar-item.active,
+.fi-sidebar a[aria-current="page"],
+.fi-sidebar a.fi-active,
+.fi-sidebar .fi-sidebar-item-active > a,
+.fi-sidebar .fi-sidebar-item.active > a,
+.fi-sidebar a[aria-current="page"] {
+    background-color: transparent !important;
+    border-left: none !important;
+    color: #fff !important;
+}

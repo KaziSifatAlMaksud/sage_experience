@@ -1,0 +1,119 @@
+/* filament-overrides.css: Custom styles for Filament dashboard */
+
+body,
+.fi-main {
+    background-color: #e7f0e6 !important; /* Sage gray/green background */
+}
+
+.filament-main-content, .fi-dashboard {
+    background-color: #e7f0e6 !important;
+}
+
+/* Add high contrast settings */
+.fi-sidebar {
+    background-color: #415141 !important; /* Sage green 700 */
+}
+
+/* Sidebar navigation item - active state */
+.fi-sidebar a[aria-current="page"]:hover {
+    --tw-bg-opacity: 1;
+    background-color: #88a57b !important; /* Sage Green */
+    --tw-text-opacity: 1;
+    color: #fff !important;
+}
+
+/* Sidebar item text (non-active) */
+.fi-sidebar .fi-sidebar-item-label,
+.fi-sidebar .fi-sidebar-group-label,
+.fi-sidebar a {
+    color: #FFFFFF !important; /* White text for non-active */
+}
+
+.fi-sidebar-header {
+    background-color: #415141 !important;
+    border-color: #415141 !important;
+}
+
+.fi-topbar {
+    background-color: #e7f0e6 !important;
+}
+
+.fi-topbar *, .fi-header-heading, .fi-topbar .fi-header-heading, .fi-topbar .fi-header-heading * {
+    color: #415141 !important; /* Sidebar sage green 700 */
+}
+
+.fi-btn.fi-btn-color-primary,
+button.bg-orange-500,
+button.bg-orange-600,
+button.text-orange-600,
+button.text-orange-500 {
+    background-color: #88a57b !important; /* Sage Green */
+    color: #fff !important;
+    border: none !important;
+}
+
+/* Tag/Badge overrides for Sage Green */
+.fi-badge,
+.badge,
+.fi-tag,
+.fi-select-multi-value,
+.fi-select-multi-value-label,
+.fi-select-multi-value-remove {
+    background-color: #e2f2d7 !important; /* Light Sage for tag bg */
+    color: #415141 !important; /* Sage text */
+    border-radius: 6px !important;
+    border: 1px solid #88a57b !important;
+}
+
+/* Project Advisor label */
+.fi-label, .fi-label-project-advisor, .fi-label-advisor {
+    color: #88a57b !important;
+    font-weight: 600;
+}
+
+/* Strong Active Sidebar Override */
+.fi-sidebar .fi-sidebar-item-active,
+.fi-sidebar .fi-sidebar-item.active,
+.fi-sidebar a[aria-current="page"] {
+    --tw-bg-opacity: 1;
+    background-color: #88a57b !important; /* Sage Green */
+}
+.fi-sidebar .fi-sidebar-item-active > a,
+.fi-sidebar .fi-sidebar-item.active > a,
+.fi-sidebar a[aria-current="page"] {
+    --tw-text-opacity: 0.8;
+    color: #fff !important;
+}
+
+/* Section headers, high-contrast */
+.fi-section-header, .fi-section-title, .fi-section-label {
+    color: #415141 !important;
+    font-weight: 700;
+}
+
+/* General input and select styling for high contrast */
+input, select, textarea {
+    background-color: #fff !important;
+    color: #222 !important;
+    border-radius: 6px !important;
+    border: 1px solid #88a57b !important;
+}
+
+
+/* Override header H1 color to sidebar green */
+.fi-header-heading {
+    color: #415141 !important;
+}
+
+/* ============ Neutralize Active Sidebar Items ============ */
+.fi-sidebar .fi-sidebar-item-active,
+.fi-sidebar .fi-sidebar-item.active,
+.fi-sidebar a[aria-current="page"],
+.fi-sidebar a.fi-active,
+.fi-sidebar .fi-sidebar-item-active > a,
+.fi-sidebar .fi-sidebar-item.active > a,
+.fi-sidebar a[aria-current="page"] {
+    background-color: transparent !important;
+    border-left: none !important;
+    color: #374237 !important;
+}
