@@ -36,6 +36,10 @@ class PeerEvaluation extends Page
     public $practices = [];
     public $colors = [];
 
+    public bool $enableRecentTab = true;
+    public bool $enableFutureTab = true;
+
+
     // For the evaluation workflow
     public $currentStep = 1; // 1 = select member, 2 = select strengths, 3 = select improvements, 4 = review
     public $currentQuestion = 1;

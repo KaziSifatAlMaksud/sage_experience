@@ -1,13 +1,29 @@
+
 <x-filament-panels::page class="bg-[#E7F0E6] text-gray-800 min-h-screen">
-    <x-filament::section class="border-gray-200">
+  <x-filament::section class="border-gray-200">
         <div class="mb-6">
             <h2 class="text-xl font-bold text-gray-800">Evaluate Team Member Performance</h2>
             <p class="text-gray-500">Select a team member and provide feedback on their skill practices</p>
         </div>
 
+        {{-- <div class="mb-4">
+            <h4 class="text-xl font-semibold text-gray-800">Your Teams:</h4>
+            @if($userTeams->isEmpty())
+                <p class="text-sm text-gray-600">You are not part of any team.</p>
+            @else
+                <ul class="list-disc list-inside text-sm text-gray-600">
+                    @foreach($userTeams as $team)
+                        <li class=''>{{ $team->name }}</li>
+                    @endforeach
+                </ul>
+            @endif
+        </div> --}}
+
         @if($currentStep == 1)
             <!-- Step 1: Select Team Member -->
             <div class="mb-6">
+                {{-- <h3 class="text-lg font-medium mb-4 text-gray-800">Select Team Member to Evaluate</h3> --}}
+
                 @if($teamMembers->isEmpty())
                     <div class="bg-white rounded-lg p-6 shadow border border-gray-200 text-center">
                         <div class="text-gray-400 mb-2">
@@ -28,18 +44,23 @@
                                         <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 20 20" fill="currentColor">
                                             <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd" />
                                         </svg>
-                                    </div>
+                                        </div>
                                     <div>
                                         <p class="text-lg font-medium text-gray-800">{{ $member->name }}</p>
-                                    </div>
+                                        
+                                        <!-- <p class="text-sm text-gray-500">
+                                            @php
+                                                $teams = $member->teams->pluck('name')->join(', ', ' and ');
+                                            @endphp
+                                            {{ $teams }}
+                                        </p> -->
+                                                </div>
+                                            </div>
+                                        </div>
+                                    @endforeach
                                 </div>
-                            </div>
-                        @endforeach
-                    </div>
-                @endif
-            </div>
-
-
+                            @endif
+                        </div>
         @elseif($currentStep == 2)
             <!-- Step 2: Select Skills -->
             <div class="mb-6">
@@ -50,73 +71,20 @@
                         </svg>
                         Back
                     </button>
+                   
                 </div>
 
                 <div class="bg-white rounded-lg p-6 shadow border border-gray-200 mb-6">
                     <h3 class="text-lg font-medium mb-2 text-gray-800">Evaluating: {{ $selectedMember->name }}</h3>
                     <p class="text-gray-500 mb-4">{{ $questions[$currentQuestion] }}</p>
 
-
-                
-                    <div id="selection{{ $currentSkillSet }}" class="mt-2 mb-6"
-                        x-data="{ tab: 'first' }">
-
-                        {{-- <div class="grid grid-cols-2 border rounded-lg overflow-hidden text-center"> --}}
-                           <div class="flex gap-4 border-b mb-4">
-                            <!-- Past Performance -->
-                              <button 
-                                    @click="tab = 'first'" wire:click="resetAndStartOver"
-                                    :class="tab === 'first' ? 'border-b-2 border-indigo-400' : ''" 
-                                    class="flex items-center gap-2 px-2 py-1"
-                                    :disabled="!@js($enableRecentTab)"
-                                    :style="!@js($enableRecentTab) ? 'opacity: 0.5;cursor: not-allowed;' : ''"
-                                    
-                                >
-                                    <img :style="tab === 'first' ? 'display: none;' : ''" src="{{ asset('images/success-icon.png') }}" alt="Past Performance Icon" class="w-7 h-7">
-                                    <span>Evaluate Recent Performance</span>
-                                </button>
-
-                            <!-- Future Skills -->
-                                <button 
-                                    @click="tab = 'second'" wire:click="resetAndStartOver"
-                                    :class="tab === 'second' ? 'border-b-2 border-indigo-400' : ''"
-                                    class="px-2 py-1"
-                                    :disabled="!@js($enableFutureTab)"
-                                    :style="!@js($enableFutureTab) ? 'opacity: 0.5;cursor: not-allowed;' : ''"
-                                >
-                                    Select Future Skills Practice
-                                </button>
-                        {{-- </div> --}}
-                    </div>
-
-                        <!-- Tab Content -->
-                        <div class="mt-6 p-4 bg-white border rounded-lg shadow">
-                            <div x-show="tab === 'first'">
-                                <h4 class="font-semibold text-gray-800 mb-2">Evaluate Recent Performance</h4>
-                                <p class="text-gray-600 text-sm">
-                                    Continue selecting skill areas and practices based on recent observable actions.
-                                </p>
-                            </div>
-
-                            <div x-show="tab === 'second'">
-                                <h4 class="font-semibold text-gray-800 mb-2">Select Future Skills Practice</h4>
-                                <p class="text-gray-600 text-sm">
-                                    Identify skill practices your teammate should focus on improving.
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- ⭐⭐⭐ END OF ADDED TAB SELECTOR ⭐⭐⭐ -->
-
-
                     @if(is_null($selectedSkillAreaId))
                         <!-- Skill Area Selection -->
                         <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
-                            <div class="text-sm text-gray-500">
-                                {{ $currentSkillSet }} of {{ $maxSelections }}
-                            </div>
-
-                            @foreach($skillAreas as $area)
+                             <div class="text-sm text-gray-500">
+                        {{ $currentSkillSet }} of {{ $maxSelections }}
+            </div>
+                    @foreach($skillAreas as $area)
                                 <div
                                     wire:click="selectSkillArea({{ $area->id }})"
                                     class="p-4 border rounded-lg cursor-pointer hover:bg-gray-50"
@@ -127,8 +95,6 @@
                                 </div>
                             @endforeach
                         </div>
-
-
                     @elseif(is_null($selectedSkillId))
                         <!-- Skill Selection -->
                         <div>
@@ -145,18 +111,16 @@
                                     >
                                         <h4 class="font-medium text-gray-800">{{ $skill['name'] }}</h4>
                                         <p class="text-xs text-gray-500 mt-1">{{ $skill['description'] }}</p>
-                                    </div>
-                                @endforeach
-                            </div>
                         </div>
-
-
+                    @endforeach
+                </div>
+            </div>
                     @elseif(is_null($selectedPracticeId))
                         <!-- Practice Selection -->
                         <div>
                             <div class="mb-4 p-3 bg-gray-100 rounded-lg">
                                 <h4 class="font-medium text-gray-700">Selected Skill: {{ $selectedSkill->name }}</h4>
-                            </div>
+                </div>
 
                             <div class="space-y-3">
                                 @foreach($practices as $practice)
@@ -166,15 +130,13 @@
                                         style="border-width: 4px; border-color: {{ $selectedSkillArea->color ?? '#888' }};"
                                     >
                                         <p class="text-gray-800">{{ $practice->description }}</p>
-                                    </div>
+                                </div>
                                 @endforeach
                             </div>
                         </div>
                     @endif
                 </div>
             </div>
-
-
         @elseif($currentStep == 3)
             <!-- Step 3: Add Comments -->
             <div class="mb-6">
@@ -206,8 +168,8 @@
                                     </div>
                                 @endif
                             @endforeach
-                        </div>
-                    </div>
+                                </div>
+                            </div>
 
                     <div class="mb-6">
                         <h4 class="font-medium mb-2 text-gray-700">Areas for Improvement:</h4>
@@ -249,15 +211,13 @@
                     </div>
                 </div>
             </div>
-
-
         @elseif($currentStep == 4)
             <!-- Step 4: Review and Submit -->
             <div class="mb-6">
                 <div class="flex justify-between items-center mb-4">
                     <button wire:click="goBack" class="flex items-center text-sage-600 hover:text-sage-700">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" viewBox="0 0 20 20" fill="currentColor">
-                            <path fill-rule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1-414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clip-rule="evenodd" />
+                            <path fill-rule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clip-rule="evenodd" />
                         </svg>
                         Back
                     </button>
@@ -330,6 +290,5 @@
                 </div>
             </div>
         @endif
-
     </x-filament::section>
 </x-filament-panels::page>
