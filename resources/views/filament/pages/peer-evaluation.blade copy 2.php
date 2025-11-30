@@ -172,9 +172,7 @@
                     @elseif(is_null($selectedPracticeId))
                         <!-- Practice Selection -->
                         <div>
-                            <div class="mb-4 p-3 bg-gray-100 rounded-lg">
-                                <h4 class="font-medium text-gray-700">Selected Skill: {{ $selectedSkill->name }}</h4>
-                            </div>
+                           
 
                             @php
                                 // Safely load colors from selected skill area
@@ -192,6 +190,11 @@
                                 <span class="px-3 py-1 text-white font-bold rounded-md"
                                     style="background-color: {{ $colorBase }}">
                                     {{ $selectedSkillArea->name }}
+                                </span>
+
+                                <span class="px-3 py-1 text-white font-bold rounded-md"
+                                    style="background-color: {{ $colorBase }}">
+                                    {{ $selectedSkill->name }}
                                 </span>
 
                             </div>
@@ -221,6 +224,7 @@
                     @php
                         $lastThreeSkills = \App\Models\Feedback::where('sender_id', Auth::id())
                                         ->where('receiver_id', $selectedMember->id)
+                                        ->where('is_positive', true)
                                         ->orderBy('id', 'desc')
                                         ->limit(3)
                                         ->get();
