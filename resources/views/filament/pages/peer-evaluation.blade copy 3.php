@@ -75,179 +75,38 @@
                     <p class="text-gray-500 mb-4">{{ $questions[$currentQuestion] }}</p>
 
 
-                    @if($currentQuestion == 2)
-                    <div >
+                
+                    <div id="selection{{ $currentSkillSet }}" class="mt-2 mb-6"
+                        x-data="{ tab: 'first' }">
 
-                    {{-- Current Strengths --}}
-                    @foreach ($currentStrengths as $index => $strength)
-                        <div class="flex items-center gap-1 p-2 rounded ">
-                            
-                            @php
-                                $skillArea = $strength['area_id'] ? \App\Models\SkillArea::find($strength['area_id']) : null;
-                                $skill     = $strength['skill_id'] ? \App\Models\Skill::find($strength['skill_id']) : null;
-                                $practice  = $strength['practice_id'] ? \App\Models\Practice::find($strength['practice_id']) : null;
-                                $color     = ($skillArea && $skillArea->color) ? $skillArea->color : '#6b7280';
+                        {{-- <div class="grid grid-cols-2 border rounded-lg overflow-hidden text-center"> --}}
+                           <div class="flex gap-4 border-b mb-4">
+                            <!-- Past Performance -->
+                              <button 
+                                    @click="tab = 'first'" wire:click="resetAndStartOver"
+                                    :class="tab === 'first' ? 'border-b-2 border-indigo-400' : ''" 
+                                    class="flex items-center gap-2 px-2 py-1"
+                                    :disabled="!@js($enableRecentTab)"
+                                    :style="!@js($enableRecentTab) ? 'opacity: 0.5;cursor: not-allowed;' : ''"
+                                    
+                                >
+                                    <img :style="tab === 'first' ? 'display: none;' : ''" src="{{ asset('images/success-icon.png') }}" alt="Past Performance Icon" class="w-7 h-7">
+                                    <span>Evaluate Recent Performance</span>
+                                </button>
 
-                            @endphp
-
-                            @if($skillArea)
-
-                            <b>Skill {{ $index }}:</b>
-                                <span class="px-3 py-1 text-white font-bold rounded-md" style="background-color: {{ $color }}">
-                                    {{ $skillArea->name }}
-                                </span>
-                            @endif
-
-                            @if($skill)
-                                <span class="px-3 py-1 text-white font-bold rounded-md" style="background-color: {{ $color }}">
-                                    {{ $skill->name }}
-                                </span>
-                            @endif
-
-                            @if($practice)
-                                <span class="px-3 py-1 text-white font-bold rounded-md" style="background-color: {{ $color }}">
-                                    {{ $practice->description }}
-                                </span>
-                            @endif
-                        </div>
-                    @endforeach
-
-                    {{-- Skills to Improve --}}
-                    @foreach ($skillsToImprove as $index => $improvement)
-                        <div class="flex items-center gap-1 p-2 rounded ">
-                          
-
-                            @php
-                                $skillArea = $improvement['area_id'] ? \App\Models\SkillArea::find($improvement['area_id']) : null;
-                                $skill     = $improvement['skill_id'] ? \App\Models\Skill::find($improvement['skill_id']) : null;
-                                $practice  = $improvement['practice_id'] ? \App\Models\Practice::find($improvement['practice_id']) : null;
-                               $color     = ($skillArea && $skillArea->color) ? $skillArea->color : '#6b7280';
-                            @endphp
-
-                            @if($skillArea)
-                              <b>Improvement {{ $index }}:</b>
-                                <span class="px-3 py-1 text-white font-bold rounded-md" style="background-color: {{ $color }}">
-                                    {{ $skillArea->name }}
-                                </span>
-                            @endif
-
-                            @if($skill)
-                                <span class="px-3 py-1 text-white font-bold rounded-md" style="background-color: {{ $color }}">
-                                    {{ $skill->name }}
-                                </span>
-                            @endif
-
-                            @if($practice)
-                                <span class="px-3 py-1 text-white font-bold rounded-md" style="background-color: {{ $color }}">
-                                    {{ $practice->description }}
-                                </span>
-                            @endif
-                        </div>
-                    @endforeach
-
-                </div>
-                    @endif
-
-                    @if($currentQuestion == 1)
-
-                    
-                   
-                    <div >
-
-                    {{-- Current Strengths --}}
-                    @foreach ($currentStrengths as $index => $strength)
-                        <div class="flex items-center gap-1 p-2 rounded ">
-                            
-
-                            @php
-                                $skillArea = $strength['area_id'] ? \App\Models\SkillArea::find($strength['area_id']) : null;
-                                $skill     = $strength['skill_id'] ? \App\Models\Skill::find($strength['skill_id']) : null;
-                                $practice  = $strength['practice_id'] ? \App\Models\Practice::find($strength['practice_id']) : null;
-                                 $color     = ($skillArea && $skillArea->color) ? $skillArea->color : '#6b7280';
-                            @endphp
-
-                            @if($skillArea)
-                            <b>Skill {{ $index }}:</b>
-                                <span class="px-3 py-1 text-white font-bold rounded-md" style="background-color: {{ $color }}">
-                                    {{ $skillArea->name }}
-                                </span>
-                            @endif
-
-                            @if($skill)
-                                <span class="px-3 py-1 text-white font-bold rounded-md" style="background-color: {{ $color }}">
-                                    {{ $skill->name }}
-                                </span>
-                            @endif
-
-                            @if($practice)
-                                <span class="px-3 py-1 text-white font-bold rounded-md" style="background-color: {{ $color }}">
-                                    {{ $practice->description }}
-                                </span>
-                            @endif
-                        </div>
-                    @endforeach
-                  
-
-                </div>
-
-
-                       
-                        <div class="mt-2 mb-6">
-                            <div class="flex gap-4 border-b mb-4">
-                                <!-- Active Button -->
-                                <div class="flex flex-col items-start">
-                                    <button 
-                                        class="flex items-center gap-2 px-2 py-1 border-b-2 border-indigo-400 text-gray-800 font-medium"
-                                    >
-                                        Evaluate Recent Performance
-                                    </button>
-                                
-                                </div>
-
-                                <!-- Disabled Button -->
-                                <div class="flex flex-col items-start">
-                                    <button 
-                                        class="flex items-center gap-2 px-2 py-1 border-b-2 border-transparent text-gray-400 cursor-not-allowed"
-                                        disabled
-                                    >
-                                        Select Future Skills Practice
-                                    </button>
-                                
-                                </div>
-                            </div>
-                        </div>
-                    @else
-                      <div class="mt-2 mb-6">
-                            <div class="flex gap-4 border-b mb-4">
-                                
-
-                                <!-- Disabled Button -->
-                                <div class="flex flex-col items-start">
-                                    <button 
-                                        class="flex items-center gap-2 px-2 py-1 border-b-2 border-transparent text-gray-400 cursor-not-allowed"
-                                        disabled
-                                    >
-                                          Evaluate Recent Performance. 
-                                    </button>
-                                
-                                </div>
-                                <!-- Active Button -->
-                                <div class="flex flex-col items-start">
-                                    <button 
-                                        class="flex items-center gap-2 px-2 py-1 border-b-2 border-indigo-400 text-gray-800 font-medium"
-                                    >
-                                      Select Future Skills Practice
-                                    </button>
-                                
-                                </div>
-                            </div>
-                        </div>
-                    @endif
-
-
-
-                      
-
+                            <!-- Future Skills -->
+                                <button 
+                                    @click="tab = 'second'" wire:click="resetAndStartOver"
+                                    :class="tab === 'second' ? 'border-b-2 border-indigo-400' : ''"
+                                    class="px-2 py-1"
+                                    :disabled="!@js($enableFutureTab)"
+                                    :style="!@js($enableFutureTab) ? 'opacity: 0.5;cursor: not-allowed;' : ''"
+                                >
+                                    Select Future Skills Practice
+                                </button>
+                        {{-- </div> --}}
+                    </div>
+                    </div>
                     <!-- ⭐⭐⭐ END OF ADDED TAB SELECTOR ⭐⭐⭐ -->
 
 
@@ -414,25 +273,25 @@
                         </div>
                     </div>
 
-                   <div class="mb-6">
-                       <label for="comments" class="block text-sm font-medium text-gray-700 mb-1">Additional Comments</label>
-                       <textarea
-                           id="comments"
-                           wire:model.defer="feedbackComments"
-                           rows="4"
-                           class="block w-full rounded-md border-gray-300 shadow-sm focus:border-sage-500 focus:ring focus:ring-sage-500 focus:ring-opacity-50"
-                           placeholder="Add any additional comments about your team member's performance..."
-                       ></textarea>
-                   </div>
+                    <div class="mb-4">
+                        <label for="comments" class="block text-sm font-medium text-gray-700 mb-1">Additional Comments</label>
+                        <textarea
+                            id="comments"
+                            wire:model="feedbackComments"
+                            rows="4"
+                            class="block w-full rounded-md border-gray-300 shadow-sm focus:border-sage-500 focus:ring focus:ring-sage-500 focus:ring-opacity-50"
+                            placeholder="Add any additional comments about your team member's performance..."
+                        ></textarea>
+                    </div>
 
-                   <div class="flex justify-end">
-                       <button
-                           wire:click="addFeedbackComment"
-                           class="px-4 py-2 bg-sage-600 text-white rounded-md hover:bg-sage-700"
-                       >
-                           Continue to Review
-                       </button>
-                   </div>
+                    <div class="flex justify-end">
+                        <button
+                            wire:click="addFeedbackComment($('#comments').val())"
+                            class="px-4 py-2 bg-sage-600 text-white rounded-md hover:bg-sage-700"
+                        >
+                            Continue to Review
+                        </button>
+                    </div>
                 </div>
             </div>
         @elseif($currentStep == 4)
@@ -492,27 +351,25 @@
                         </div>
                     </div>
 
-                    
                     <div class="mb-6">
-                       <h4 class="font-medium mb-2 text-gray-700">Additional Comments:</h4>
-                       <div class="p-3 bg-gray-50 border border-gray-200 rounded-lg">
-                           @if(empty($feedbackComments))
-                               <p class="text-gray-500 italic">No additional comments provided.</p>
-                           @else
-                               <p class="text-gray-800">{{ $feedbackComments }}</p>
-                           @endif
-                       </div>
-                   </div>
+                        <h4 class="font-medium mb-2 text-gray-700">Additional Comments:</h4>
+                        <div class="p-3 bg-gray-50 border border-gray-200 rounded-lg">
+                            @if(empty($feedbackComments))
+                                <p class="text-gray-500 italic">No additional comments provided.</p>
+                            @else
+                                <p class="text-gray-800">{{ $feedbackComments }}</p>
+                            @endif
+                        </div>
+                    </div>
 
-                   <div class="flex justify-end">
-                       <button
-                           wire:click="submitFeedback"
-                           class="px-5 py-2 bg-sage-600 text-white rounded-md hover:bg-sage-700"
-                       >
-                           Submit Feedback
-                       </button>
-                   </div>
-
+                    <div class="flex justify-end">
+                        <button
+                            wire:click="submitFeedback"
+                            class="px-5 py-2 bg-sage-600 text-white rounded-md hover:bg-sage-700"
+                        >
+                            Submit Feedback
+                        </button>
+                    </div>
                 </div>
             </div>
         @endif

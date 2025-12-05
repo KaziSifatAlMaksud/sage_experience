@@ -36,8 +36,9 @@ class PeerEvaluation extends Page
     public $practices = [];
     public $colors = [];
 
-        public bool $enableRecentTab = true;
-    public bool $enableFutureTab = false;
+    public bool $enableRecentTab = true;
+    public bool $enableFutureTab = true;
+
 
     // For the evaluation workflow
     public $currentStep = 1; // 1 = select member, 2 = select strengths, 3 = select improvements, 4 = review
@@ -51,6 +52,7 @@ class PeerEvaluation extends Page
     public $selectedSkillAreaId = null;
     public $selectedSkillId = null;
     public $selectedPracticeId = null;
+    public $selectedPractice = null;
     public $currentStrengths = [];
     public $skillsToImprove = [];
     public $maxSelections = 3;
@@ -149,6 +151,12 @@ class PeerEvaluation extends Page
             $this->colors[$area->id] = $colorPalette[$index % count($colorPalette)];
         }
     }
+    public function resetAndStartOver()
+    {
+        // Your logic here
+        $this->reset();
+    }
+
 
     public function selectTeamMember($memberId)
     {
@@ -242,6 +250,18 @@ class PeerEvaluation extends Page
     public function selectPractice($practiceId, $skillSet = null)
     {
         $skillSet = $skillSet ?? $this->currentSkillSet;
+        $this->selectedPracticeId = $practiceId;
+        $this->selectedPractice = Practice::find($practiceId);
+
+        // Move to final review
+        $this->currentStep = 3;
+        $this->dispatch('practiceSelected');
+       
+    }
+
+  public function finalPractince($practiceId, $skillSet = null)
+    {
+        $skillSet = $skillSet ?? $this->currentSkillSet;
 
         // Store the selection in the appropriate skill set
         if ($this->currentQuestion == 1) {
@@ -271,16 +291,19 @@ class PeerEvaluation extends Page
                 $this->selectedPracticeId = null;
             } else {
                 // Move to review
-                $this->currentStep = 3;
+                $this->currentStep = 4;
             }
         }
 
-        $this->dispatch('practiceSelected');
+      
     }
 
-    public function addFeedbackComment()
+
+
+
+    public function addFeedbackComment($comments)
     {
-       // $this->feedbackComments = $comments;
+        $this->feedbackComments = $comments;
         $this->currentStep = 4; // Move to final review
     }
 
@@ -346,6 +369,9 @@ class PeerEvaluation extends Page
 
         $this->loadTeamMembers();
     }
+
+    
+
 
     public function goBack()
     {
